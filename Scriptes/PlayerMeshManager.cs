@@ -11,6 +11,13 @@ public class PlayerMeshManager
 
 	private int verticesCount;
 
+	private List<Vector2> uvs;
+	
+	public List<Vector2> UVs
+	{
+		get => uvs;
+	}
+
 	public List<int> TriIndices
 	{
 		get => triIndices;
@@ -27,7 +34,16 @@ public class PlayerMeshManager
 		CreatePlayerVertices();
 
 		startIndex = _startIndex;
+
+		CreateUVs();
+
 		CreatePlayerTriIndices();
+	}
+
+	public void AddNullUVs()
+	{
+		for (int i = 0; i < vertices.Count - connectedVertices.Count; i++)
+			uvs.Add(Vector2.zero);
 	}
 
 	private void CreatePlayerVertices()
@@ -37,6 +53,8 @@ public class PlayerMeshManager
 		{
 			vertices.Add(connectedVertices[i]);
 		}
+
+		//return;
 
 		vertices.Add(connectedVertices[0] + Vector3.up);
 		vertices.Add(connectedVertices[1] + Vector3.up);
@@ -52,15 +70,39 @@ public class PlayerMeshManager
 		for (int i = 0; i < connectedVertices.Count; i++)
 			vertices[i + startIndex] = connectedVertices[i];
 
+		//return ;
+
 		vertices[4 + startIndex] = connectedVertices[0] + Vector3.up;
 		vertices[5 + startIndex] = connectedVertices[1] + Vector3.up;
 		vertices[6 + startIndex] = connectedVertices[2] + Vector3.up;
 		vertices[7 + startIndex] = connectedVertices[3] + Vector3.up;
 	}
 
+	private void CreateUVs()
+	{
+		uvs = new List<Vector2>();
+
+		uvs.Add(new Vector2(0, 0));
+		uvs.Add(new Vector2(1, 0));
+		uvs.Add(new Vector2(0, 1));
+		uvs.Add(new Vector2(1, 1));
+
+		AddNullUVs();
+	}
+
 	private void CreatePlayerTriIndices()
 	{
 		triIndices = new List<int>();
+
+		//triIndices.Add(startIndex + 0);
+		//triIndices.Add(startIndex + 2);
+		//triIndices.Add(startIndex + 1);
+                //
+		//triIndices.Add(startIndex + 2);
+		//triIndices.Add(startIndex + 3);
+		//triIndices.Add(startIndex + 1);
+		
+		//return;
 
 		triIndices.Add(startIndex + 0);
 		triIndices.Add(startIndex + 4);

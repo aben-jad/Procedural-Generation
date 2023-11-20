@@ -6,7 +6,7 @@ public class TerrainMeshManager
 {
 	private int widthLength, heightLength;
         
-	private int startIndex;
+	private int startIndex, verticesCount;
 
 	private int currentHiddenFace, oldHiddenFace;
         
@@ -15,6 +15,13 @@ public class TerrainMeshManager
         
 	private List<int> triIndices;
 	private List<int> hiddenTriIndices;
+
+	private List<Vector2> uvs;
+
+	public List<Vector2> UVs
+	{
+		get => uvs;
+	}
         
 	public List<int> TriIndices
 	{
@@ -42,6 +49,12 @@ public class TerrainMeshManager
 		}
 	}
 
+	public void AddNullUVs()
+	{
+		for (int i = verticesCount; i < vertices.Count; i++)
+			uvs.Add(Vector2.zero);
+	}
+
 	public TerrainMeshManager(List<Vector3> _verticesReference, int _startIndex, int _widthLength, int _heightLength, int _currentHiddenFace = 0)
 	{
 		widthLength = _widthLength;
@@ -53,6 +66,8 @@ public class TerrainMeshManager
 		vertices = _verticesReference;
 
 		CreateVertices();
+
+		CreateUVs();
 
 		CreateTriIndices();
 
@@ -66,7 +81,18 @@ public class TerrainMeshManager
 			for (int x = 0; x < widthLength; x++)
 				vertices.Add(new Vector3(x, 0, z));
 		}
+		verticesCount = vertices.Count;
+	}
 
+	private void CreateUVs()
+	{
+		uvs = new List<Vector2>();
+
+		for (int z = 0; z < heightLength; z++)
+		{
+			for (int x = 0; x < widthLength; x++)
+				uvs.Add(new Vector2((float)x / (widthLength - 1), (float)z / (heightLength - 1)));
+		}
 	}
 
 	private void CreateTriIndices()
